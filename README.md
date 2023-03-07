@@ -1,2 +1,2 @@
 # quantum
-quantum projects for learning and fun
+A collection of julia notebooks about quantum projects, for learning and fun.
