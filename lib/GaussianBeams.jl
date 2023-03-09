@@ -1,19 +1,32 @@
-#Module for creating Various Gaussian beams
-using LinearAlgebra
+#=
+Module for creating various Gaussian beams in 3D, exact solutions of Maxwell's equations
+- E_Laguerre_Gauss: solution under the paraxial approximation
+- E_Gauss: solution without the paraxial approximation
+=#
 
+using LinearAlgebra
+using StaticArrays
+
+#importing Bessel functions for the calculations
 import SpecialFunctions.besselj0
 import SpecialFunctions.besselj1
 import SpecialFunctions.erfi
 
+#package to evaluate integrals in 1D
 using QuadGK
 
 #------------------------------------------------------------------------------#
-#Gaussian beam in the paraxial approx propagating along z
-#    r: point at which we evaluate the field
-#  E_0: amplplitude
-#    p: polarization transverse x,y) 3d vector
-#  w_0: beam waist
-#  k: 3d wavevector, typically with norm the resonant k0
+#=
+Gaussian beam in the paraxial approximation
+Arguments:
+    r: point in 3D at which we evaluate the field
+  E_0: amplitude
+    p: polarization vector
+  w_0: beam waist
+  k: 3D wavevector
+Return:
+  Electrical field as a 3D vector
+=#
 function E_Laguerre_Gauss(r,E_0,p,vk,w_0)
 
   #auxiliary variables for the calculation
@@ -44,13 +57,17 @@ end
 
 
 #------------------------------------------------------------------------------#
-#Gaussian beam (exact solution)  propagating along z
-#    r: point at which we evaluate the field
-#  E_0: amplplitude
-#    p: polarization 3d vector
-#  w_0: beam waist
-#  k: 3d wavevector, typically with norm the resonant k0
-#it is not enforced that k and p are orthogonal
+#=
+Gaussian beam (exact solution)
+Arguments:
+    r: point in 3D at which we evaluate the field
+  E_0: amplitude
+    p: polarization vector
+  w_0: beam waist
+  k: 3D wavevector
+Return:
+  Electrical field as a 3D vector
+=#
 function E_Gauss(r,E_0,p,vk,w_0)
 
   zk=dot(vk,r)
@@ -94,13 +111,16 @@ end
 #------------------------------------------------------------------------------#
 #=
 Gaussian field at atomic positions
-z: list of atomic positions (3D vectors)
-Pa: polarization of the atoms
-E_0: field amplitude
-Pf: polarization of the field
-vk: field wavevector
-w_0: beam waist
-fieldtype: string to specify the field type
+Arguments:
+  z: list of atomic positions (3D vectors)
+  Pa: polarization of the atoms
+  E_0: field amplitude
+  Pf: polarization of the field
+  vk: field wavevector
+  w_0: beam waist
+  fieldtype: string to specify the field type
+Returns:
+  An array of the field evaluated at the atomic positions
 =#
 function E_at_atoms(z,Pa,E_0,Pf,vk,w_0,fieldtype)
 
